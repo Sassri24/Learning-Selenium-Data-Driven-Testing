@@ -1,7 +1,6 @@
 public class datadriventesting {
 
     //first class
-
     public static void main(String [] args){
         System.out.println("test run");
         System.out.println("test run2");
@@ -9,6 +8,4 @@ public class datadriventesting {
         System.out.println("test run4");
         System.out.println("test run5");
     }
-
-
 }
