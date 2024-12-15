@@ -5,32 +5,36 @@
     <test name="Both correct">
         <parameter name="username" value="Admin"/>
         <parameter name="password" value="admin123"/>
+        <parameter name="validation" value="valid"/>
         <classes>
-            <class name="LoginTestCases.BothCorrect"/>
+            <class name="DataDrivenTest.LoginUsingParameters"/>
         </classes>
     </test>
 
     <test name="Both Incorrect">
         <parameter name="username" value="WrongAdmin"/>
         <parameter name="password" value="Wrongadmin123"/>
+        <parameter name="validation" value="invalid"/>
         <classes>
-            <class name="LoginTestCases.BothIncorrect"/>
+            <class name="DataDrivenTest.LoginUsingParameters"/>
         </classes>
     </test>
 
     <test name="Correct password">
         <parameter name="username" value="WrongAdmin"/>
         <parameter name="password" value="admin123"/>
+        <parameter name="validation" value="invalid"/>
         <classes>
-            <class name="LoginTestCases.CorrectPassword"/>
+            <class name="DataDrivenTest.LoginUsingParameters"/>
         </classes>
     </test>
 
     <test name="Correct Username">
         <parameter name="username" value="Admin"/>
         <parameter name="password" value="Wrongadmin123"/>
+        <parameter name="validation" value="invalid"/>
         <classes>
-            <class name="LoginTestCases.CorrectUsername"/>
+            <class name="DataDrivenTest.LoginUsingParameters"/>
         </classes>
     </test>
 </suite>

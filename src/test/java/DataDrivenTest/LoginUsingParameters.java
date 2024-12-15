@@ -1,9 +1,10 @@
-package LoginTestCases;
+package DataDrivenTest;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
@@ -11,7 +12,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
-public class BothIncorrect {
+public class LoginUsingParameters {
 
     WebDriver driver;
 
@@ -24,8 +25,8 @@ public class BothIncorrect {
     }
 
     @Test
-    @Parameters({"username","password"})
-    public void bothIncorrect(String uName,String pass){
+    @Parameters({"username","password","validation"})
+    public void loginUsingParameters(String uName,String pass,String validation){
         WebElement userName=driver.findElement(By.xpath("//input[@placeholder='Username']"));
         WebElement password=driver.findElement(By.xpath("//input[@placeholder='Password']"));
         WebElement loginButton=driver.findElement(By.xpath("//button[normalize-space()='Login']"));
@@ -33,6 +34,14 @@ public class BothIncorrect {
         userName.sendKeys(uName);
         password.sendKeys(pass);
         loginButton.click();
+
+        boolean verifiedUrl=driver.getCurrentUrl().contains("dashboard");
+
+        if(validation.equals("valid")){
+            Assert.assertTrue(verifiedUrl,"Successfully login but not navigate to dashboard ");
+        }else{
+            Assert.assertFalse(verifiedUrl,"login not success but navigate to dashboard");
+        }
     }
 
     @AfterMethod
