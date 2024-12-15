@@ -1,5 +1,7 @@
 package DataDrivenTest;
 
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
@@ -30,8 +32,8 @@ public class LoginUsingDataProviderByReadingExcel {
         driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
     }
 
-    @Test
-    public void readExcelData() throws IOException {
+    @DataProvider(name = "loginData")
+    public Object[][] readExcelData() throws IOException {
         FileInputStream file=new FileInputStream(System.getProperty("user.dir")+"\\testData\\userDetails.xlsx");
         XSSFWorkbook workbook=new XSSFWorkbook(file);
         XSSFSheet sheet= workbook.getSheet("Sheet1");   //getSheetAt(0) --- by index---
@@ -39,21 +41,22 @@ public class LoginUsingDataProviderByReadingExcel {
         int columnCount=sheet.getRow(0).getLastCellNum();
         System.out.println("row count: "+ rowCount);       //output is 4 but actual row count is 5
         System.out.println("column count: "+columnCount);  //output is 3
-    }
 
-    @DataProvider(name = "loginData")
-    public String[][] dataProvider(){
-        String[][] data={
-                {"Admin","admin123","valid"},
-                {"wrongAdmin","wrongadmin123","invalid"},
-                {"wrongAdmin","admin123","invalid"},
-                {"Admin","wrongadmin123","invalid"}
-        };
-        return data;
+        String[][] testData=new String[rowCount][columnCount];
+
+        for(int r=1; r<=rowCount; r++){
+            for(int c=0; c<columnCount; c++){
+                testData[r-1][c] = sheet.getRow(r).getCell(c).toString();
+            }
+        }
+
+        workbook.close();
+        file.close();
+
+        return testData;
     }
 
     @Test(dataProvider = "loginData")
-
     public void loginUsingDataProviderByExcel(String uName,String pass,String validation){
         WebElement userName=driver.findElement(By.xpath("//input[@placeholder='Username']"));
         WebElement password=driver.findElement(By.xpath("//input[@placeholder='Password']"));
@@ -76,4 +79,29 @@ public class LoginUsingDataProviderByReadingExcel {
     public void closeBrowser(){
         driver.quit();
     }
+
+
+    //method for print excel data
+        public void printExcelData() throws IOException {
+        FileInputStream file=new FileInputStream(System.getProperty("user.dir")+"\\testData\\userDetails.xlsx");
+        XSSFWorkbook workbook=new XSSFWorkbook(file);
+        XSSFSheet sheet= workbook.getSheet("Sheet1");   //getSheetAt(0) --- by index---
+        int rowCount=sheet.getLastRowNum();
+        int columnCount=sheet.getRow(0).getLastCellNum();
+        System.out.println("row count: "+ rowCount);       //output is 4 but actual row count is 5
+        System.out.println("column count: "+columnCount);  //output is 3
+
+        for(int r=0; r<=rowCount; r++){
+            XSSFRow currentRow= sheet.getRow(r);
+            for(int c=0; c<columnCount; c++){
+                XSSFCell currentCell= currentRow.getCell(c);
+                String cellValue= currentCell.toString();
+                System.out.print(cellValue+ "\t\t");
+            }
+            System.out.println();
+        }
+    }
+
 }
+
+
